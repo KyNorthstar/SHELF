@@ -1,10 +1,10 @@
 //
-// WholeDatabaseDeletion.swift
+// WholeDatabaseDeletionTests.swift
 //
 // Written by Ky on 2024-11-24.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -15,7 +15,7 @@ import SHELF
 
 
 
-struct WholeDatabaseDeletion {
+struct WholeDatabaseDeletionTests {
     
     /// Ensure the golden-path whole-database deletion succeeds
     @Test(arguments: [
@@ -23,7 +23,7 @@ struct WholeDatabaseDeletion {
         .local(.newTestLocation(named: "DELETEME")),
     ] as [ShelfConfig.StorageLocation])
     func deleteWholeDatabase(storageLocation: ShelfConfig.StorageLocation) async throws {
-        var shelf = await Shelf(config: .init(id: .init(), storageLocation: storageLocation))
+        var shelf = await Shelf(at: storageLocation)
         
         for difficultString in difficultStrings {
             let testObject = SimpleObject(name: difficultString)
@@ -56,7 +56,7 @@ struct WholeDatabaseDeletion {
         .local(.newTestLocation(named: "DELETEME")),
     ] as [ShelfConfig.StorageLocation])
     func failToDeleteWholeDatabase_badOath(storageLocation: ShelfConfig.StorageLocation) async throws {
-        var shelf = await Shelf(config: .init(id: .init(), storageLocation: storageLocation))
+        var shelf = await Shelf(at: storageLocation)
         
         for difficultString in difficultStrings {
             let testObject = SimpleObject(name: difficultString)
@@ -87,7 +87,7 @@ struct WholeDatabaseDeletion {
             .local(.newTestLocation(named: "DELETEME")),
           ] as [ShelfConfig.StorageLocation])
     func failToDeleteWholeDatabase_tookTooLong(storageLocation: ShelfConfig.StorageLocation) async throws {
-        var shelf = await Shelf(config: .init(id: .init(), storageLocation: storageLocation))
+        var shelf = await Shelf(at: storageLocation)
         
         for difficultString in difficultStrings {
             let testObject = SimpleObject(name: difficultString)
@@ -124,7 +124,7 @@ struct WholeDatabaseDeletion {
         .local(.newTestLocation(named: "DELETEME")),
     ] as [ShelfConfig.StorageLocation])
     func failToDeleteWholeDatabase_failureInterruptions(storageLocation: ShelfConfig.StorageLocation) async throws {
-        var shelf = await Shelf(config: .init(id: .init(), storageLocation: storageLocation))
+        var shelf = await Shelf(at: storageLocation)
         
         for difficultString in difficultStrings {
             let testObject = SimpleObject(name: difficultString)

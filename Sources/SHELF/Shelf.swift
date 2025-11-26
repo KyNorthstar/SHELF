@@ -4,12 +4,13 @@
 // Written by Ky on 2024-11-22.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
 import Foundation
 
+@preconcurrency import FunctionTools
 import SerializationTools
 import SimpleLogging
 
@@ -129,9 +130,10 @@ public extension Shelf {
 
 
 public extension Shelf {
-    enum InitError: Error {
-        //case couldNotLoadExistingConfig
-    }
+//    enum InitError: Error {
+//        //case couldNotLoadExistingConfig
+//    }
+    typealias InitError = Never // Currently unsure if `Shelf` initializers even _should_ throw
 }
 
 
@@ -159,11 +161,111 @@ public extension Shelf {
         
         /// The object file exists, but can't be read from
         /// - Parameter cause: The OS-given reason why the file could not be read
-        case couldNotReadObjectFile(cause: Error)
+        case couldNotReadObjectFile(cause: Error?)
         
         /// The object file exists, and SHELF sucessfully read the raw data inside it, but that data couldn't be deserialized into the in-memory object itself
         /// - Parameter cause: The OS-given reason why the object could not be parsed
-        case couldNotParseObject(cause: Error)
+        case couldNotParseObject(cause: Error?)
+    }
+}
+
+
+
+// MARK: - API: Mutating
+
+public extension Shelf {
+    /// Attempts to find & update the SHELF object with the given ID via the given function
+    ///
+    /// - Parameters:
+    ///   - id:               The ID of the object to be updated
+    ///   - updateFunction:   Called if the object was found. This function is passed the object, allowed to mutate it, and then returns nothing
+    ///   - onObjectNotFound: _optional_ - Called if the object was not found. This function returns a value describing how the situation should be handled.
+    ///                       If no function is passed, no action is taken upon failure to find an object
+    ///
+    /// - Throws: An ``UpdateError`` if any error occurs while attempting to update the object
+    mutating func update<Object: ShelfData>(
+        objectWithId id: ShelfId,
+        ofType _: Object.Type = Object.self,
+        by updateFunction: ObjectUpdateFunction<Object>,
+        onObjectNotFound: ObjectNotFoundFunction<Object> = { .doNothing })
+    async throws(UpdateError) {
+        try await serializer.update(objectWithId: id, by: updateFunction, onObjectNotFound: onObjectNotFound)
+    }
+    
+    
+    /// Attempts to allow the given function to mutate the SHELF object with the given ID
+    ///
+    /// - Parameters:
+    ///   - id:               The ID of the object to be updated
+    ///   - updateFunction:   Called if the object was found. This function is passed the object, allowed to mutate it, and then returns nothing
+    ///   - onObjectNotFound: _optional_ - Called if the object was not found. This function returns a value describing how the situation should be handled.
+    ///                       If no function is passed, no action is taken upon failure to find an object
+    ///
+    /// - Throws: An ``UpdateError`` if any error occurs while attempting to update the object
+    mutating func update<Object: ShelfData>(
+        objectWithId id: ShelfId,
+        ofType _: Object.Type = Object.self,
+        by updateFunction: ObjectUpdateFunction<Object>,
+        onObjectNotFound: ObjectNotFoundFunction_DoNothing)
+    async throws(UpdateError) {
+        try await update(objectWithId: id, by: updateFunction, onObjectNotFound: {
+            try await onObjectNotFound()
+            return .doNothing
+        })
+    }
+    
+    
+    /// Attempts to allow the given function to mutate the SHELF object with the given ID
+    ///
+    /// - Parameters:
+    ///   - id:               The ID of the object to be updated
+    ///   - updateFunction:   Called if the object was found. This function is passed the object, allowed to mutate it, and then returns nothing
+    ///   - onObjectNotFound: _optional_ - What to do if the object was not found.
+    ///                       Defaults to no action taken upon failure to find an object
+    ///
+    /// - Throws: An ``UpdateError`` if any error occurs while attempting to update the object
+    mutating func update<Object: ShelfData>(
+        objectWithId id: ShelfId,
+        ofType _: Object.Type = Object.self,
+        by updateFunction: ObjectUpdateFunction<Object>,
+        onObjectNotFound: ObjectNotFoundResponse<Object> = .doNothing)
+    async throws(UpdateError) {
+        try await update(objectWithId: id, by: updateFunction, onObjectNotFound: { onObjectNotFound })
+    }
+    
+    
+    
+    /// What to do when an object to be updated wasn't found (value edition)
+    enum ObjectNotFoundResponse<Object: ShelfData>: Sendable {
+        
+        /// Don't take any further action upon failure to find an object
+        case doNothing
+        
+        /// Since nothing was found where an object was expected, place this object there instead
+        case saveNewObject(Object)
+    }
+    
+    
+    
+    /// How exactly to update an object
+    typealias ObjectUpdateFunction<Object: ShelfData> = @Sendable (inout Object) async throws -> Void
+    
+    /// What to do when an object to be updated wasn't found (function edition)
+    typealias ObjectNotFoundFunction<Object: ShelfData> = @Sendable () async throws -> ObjectNotFoundResponse<Object>
+    
+    /// A type of function which does cleanup work when an object isn't found
+    typealias ObjectNotFoundFunction_DoNothing = @Sendable () async throws -> Void
+}
+
+
+
+public extension Shelf {
+    
+    /// An error which might occur while attempting to read from the object store
+    enum UpdateError: Error {
+        case updateFunctionThrewSomeError(Error)
+        case couldNotReadObject(cause: ReadError)
+        case couldNotWriteObject(cause: WriteError)
     }
 }
 

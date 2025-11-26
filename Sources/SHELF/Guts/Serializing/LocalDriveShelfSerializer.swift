@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-22.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -37,7 +37,7 @@ internal extension LocalDriveShelfSerializer {
 
 extension LocalDriveShelfSerializer: ShelfSerializer {
     
-    func __readRawData(forObjectWithId id: ShelfId) async throws(Shelf.ReadError) -> Data? {
+    func __read(rawDataForObjectWithId id: ShelfId) async throws(Shelf.ReadError) -> Data? {
         let objectFileUrl = objectUrl(for: id)
         let objectFilePath = objectFileUrl.path(percentEncoded: false)
         
@@ -69,8 +69,37 @@ extension LocalDriveShelfSerializer: ShelfSerializer {
     }
     
     
-    mutating func __update(objectWithId id: ShelfId, newRawData: Data) async throws(Shelf.WriteError) {
-        try await __write(rawObjectData: newRawData, withId: id)
+    mutating func __update(rawDataForObjectWithId id: ShelfId, by transform: (Data?) async throws(Shelf.UpdateError) -> Data?) async throws(Shelf.UpdateError) {
+        var oldData: Data?
+        
+        do {
+            oldData = try await __read(rawDataForObjectWithId: id)
+        }
+        catch {
+            throw .couldNotReadObject(cause: error)
+        }
+        
+        
+        let newData: Data
+        
+        do {
+            guard let transformed = try await transform(oldData) else {
+                return
+            }
+            
+            newData = transformed
+        }
+        catch {
+            throw .updateFunctionThrewSomeError(error)
+        }
+        
+        
+        do {
+            try await __write(rawObjectData: newData, withId: id)
+        }
+        catch {
+            throw .couldNotWriteObject(cause: error)
+        }
     }
     
     

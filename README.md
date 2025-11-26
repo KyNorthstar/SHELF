@@ -1,4 +1,4 @@
-#  SHELF • Simple Heckin Entity Library Framework
+#  SHELF • Simple Heckin’ Entity Library Framework
 
 A simple object-storage solution
 
@@ -6,24 +6,27 @@ A simple object-storage solution
 
 ## λ☢️ This is in pre-Alpha testing!
 
-This is still in low-level rapid development. Expect breaking changes to be frequent, and reliability to be low.
+This is still in low-level rapid initial development. Expect breaking changes to be frequent, and reliability to be low.
 
 **This is not yet ready for production code!**
 
 Here's the desired features:
 
 - [x] Create
+    - [ ] Make it so devs don't have to do `id: .init()` every tim they make their own objects
 - [x] Read
-- [ ] Update
+- [x] Update
+    - [ ] Immutable objects maybe?
 - [x] Delete
 - [ ] Automatically re-load current database
 - [x] Concurrency-capable
 - [ ] Concurrency-safe
-    - [ ] Probably 1 background coordinator task that can spawn as many subtasks as it wants to do the work 
+    - [ ] Probably 1 background coordinator task that can spawn as many subtasks as it wants to do the work
 - [ ] Relational sugar
     - [ ] Compile-time conveniences (e.g. @Reference resolving to an ID)
     - [ ] A way to delete an object and remove its reference from all other objects, maybe also deleting objects it references
     - [ ] I dunno maybe like a cache of IDs which are commonly associated? That sounds more like a 2.0 kinda thing tho
+- [ ] Support for older platforms (currently setting to most-recent for rapid initial development)
 
 
 
@@ -36,10 +39,10 @@ If you want SHELF to store your object, then all you need is to conform its type
 
 ### Example: Saving & retrieving
 
+Given these types:
 ```swift
 import SHELF
 
-let shelf = Shelf()
 
 
 struct User: ShelfData {
@@ -47,8 +50,6 @@ struct User: ShelfData {
     var name: String
 }
 
-let dax = User(id: .init(), name: "Dax")
-let eevie = User(id: .init(), name: "Eevie")
 
 
 struct Message: ShelfData {
@@ -71,7 +72,14 @@ struct Message: ShelfData {
         }
     }
 }
+```
 
+
+You create your objects just like any other:
+
+```swift
+let dax = User(id: .init(), name: "Dax")
+let eevie = User(id: .init(), name: "Eevie")
 
 let greeting = Message(
     id: .init(),
@@ -86,14 +94,38 @@ let response = Message(
     from: eevie,
     content: "Hay bitch 🧡"
 )
+```
 
 
+Storing those objects in SHELF is heckin' simple...
+
+```swift
+let shelf = await Shelf()
 try await shelf.save(greeting)
 try await shelf.save(response)
-
-try await shelf.object(withId: response.id)
-assert(response.replyTo == greeting) // True!!
 ```
+
+
+Getting them back out is heckin' simple...
+
+```swift
+let retrievedResponse = try await shelf.object(withId: response.id)
+assert(retrievedResponse.replyTo == greeting) // True!!
+```
+
+
+Even updating them is heckin' simple!
+
+```swift
+try await shelf.update(objectWithId: greeting.id) {
+    $0.content.append("!")
+}
+
+let retrievedGreeting = try await shelf.object(withId: greeting.id)
+assert(retrievedGreeting.content == "Good morning~!") // True!!
+```
+
+
 
 ### SwiftUI App
 
@@ -170,7 +202,7 @@ Inside those subfolders are the object files themselves.
   │ ├ 📁 73
   │ │ ╰ 📄 6273674B-F271-4521-9B74-F5656A1F815D
   │ │
-  │ ╰ 📁 AC 
+  │ ╰ 📁 AC
   │   ╰ 📄 62AC54A2-8A00-45B0-93B6-3BE499E85219
   │
   ├ 📁 A1

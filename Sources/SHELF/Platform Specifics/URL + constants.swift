@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-25.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 

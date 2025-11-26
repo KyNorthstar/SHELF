@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-22.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -19,7 +19,7 @@ internal final actor InMemoryShelfSerializer: ShelfSerializer {
     private var inMemoryStore: [ShelfId : Data] = [:]
     
     
-    func __readRawData(forObjectWithId id: ShelfId) async throws(Shelf.ReadError) -> Data? {
+    func __read(rawDataForObjectWithId id: ShelfId) async throws(Shelf.ReadError) -> Data? {
         return inMemoryStore[id]
     }
     
@@ -29,8 +29,9 @@ internal final actor InMemoryShelfSerializer: ShelfSerializer {
     }
     
     
-    func __update(objectWithId id: ShelfId, newRawData: Data) async throws(Shelf.WriteError) {
-        try await __write(rawObjectData: newRawData, withId: id)
+    func __update(rawDataForObjectWithId id: ShelfId, by transform: (Data?) async throws(Shelf.UpdateError) -> Data?) async throws(Shelf.UpdateError) {
+        guard let transformed = try await transform(inMemoryStore[id]) else { return }
+        inMemoryStore[id] = transformed
     }
     
     

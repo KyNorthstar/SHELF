@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-14.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -44,7 +44,7 @@ public extension __ShelfContextProtocol {
 
 public extension ShelfConfig {
     
-    /// The ID that a SHELF config uses by default.
+    /// The ID that a SHELF config uses by default: `45F23C5F-2468-464D-976F-4C1DD20DEB19`.
     ///
     /// You can specify one if you want to, but if you don't, it'll always be this.
     ///

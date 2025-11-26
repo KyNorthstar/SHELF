@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-22.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -23,7 +23,7 @@ struct BasicReadWriteTests {
         .local(.newTestLocation()),
     ] as [ShelfConfig.StorageLocation])
     func writeAndReadSimpleData(storageLocation: ShelfConfig.StorageLocation) async throws {
-        var shelf = await Shelf(config: .init(id: .init(), storageLocation: storageLocation))
+        var shelf = await Shelf(at: storageLocation)
         
         let testObject_arc = SimpleObject(name: "Arc")
         try await shelf.save(testObject_arc)
@@ -50,6 +50,7 @@ struct BasicReadWriteTests {
         }
     }
     
+    
     /// Ensure complex writing & reading from a database works
     @Test(arguments: [
         ShelfConfig.StorageLocation.onlyInMemory,
@@ -57,7 +58,7 @@ struct BasicReadWriteTests {
     ])
     func writeAndReadComplexData(storageLocation: ShelfConfig.StorageLocation) async throws {
         print(storageLocation)
-        var shelf = await Shelf(config: .init(id: .init(), storageLocation: storageLocation))
+        var shelf = await Shelf(at: storageLocation)
         
         var retrievedComplex: ComplexObject
         

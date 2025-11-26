@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-22.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -22,25 +22,25 @@ struct ComplexObject {
     var id: ShelfId
     
     // Basic types
-    let integer: Int
-    let float: Float
-    let double: Double
-    let string: String
-    let boolean: Bool
+    var integer: Int
+    var float: Float
+    var double: Double
+    var string: String
+    var boolean: Bool
     
     // Optional values
-    let optionalInteger: Int?
-    let optionalString: String?
+    var optionalInteger: Int?
+    var optionalString: String?
     
     // Collections
-    let arrayOfInts: [Int]
-    let dictionaryOfStrings: [String: String]
-    let setOfDoubles: Set<Double>
+    var arrayOfInts: [Int]
+    var dictionaryOfStrings: [String: String]
+    var setOfDoubles: Set<Double>
     
     // Properties using nested types
-    let nestedStruct: NestedStruct
-    let enumValue: NestedEnum
-    let arrayOfNested: [NestedStruct]
+    var nestedStruct: NestedStruct
+    var enumValue: NestedEnum
+    var arrayOfNested: [NestedStruct]
     
     // Computed property
     var computedValue: String {
@@ -214,7 +214,7 @@ extension Array where Element: FixedWidthInteger {
         length: UInt = .random(in: 0...1312),
         eachElementRange: ClosedRange<Element> = .min ... .max)
     -> Self {
-        (1...length).map { _ in .random(in: eachElementRange) }
+        (0..<length).map { _ in .random(in: eachElementRange) }
     }
 }
 
@@ -228,7 +228,7 @@ where Element: BinaryFloatingPoint,
         length: UInt = .random(in: 0...1312),
         eachElementRange: ClosedRange<Element> = .fullRange)
     -> Self {
-        .init((1...length).map { _ in .random(in: eachElementRange) })
+        .init((0..<length).map { _ in .random(in: eachElementRange) })
     }
 }
 
@@ -236,7 +236,7 @@ where Element: BinaryFloatingPoint,
 
 extension [String : String] {
     static func random(in range: ClosedRange<UInt>) -> Self {
-        .init(uniqueKeysWithValues: (1 ... UInt.random(in: range)).map { _ in
+        .init(uniqueKeysWithValues: (0 ..< UInt.random(in: range)).map { _ in
             (.random(), .random())
         })
     }
@@ -247,3 +247,6 @@ extension [String : String] {
 extension ClosedRange where Bound: BinaryFloatingPoint {
     static var fullRange: Self { -(.greatestFiniteMagnitude / 10) ... (.greatestFiniteMagnitude / 10) }
 }
+
+
+

@@ -4,7 +4,7 @@
 // Written by Ky on 2024-11-22.
 // Copyright waived. No rights reserved.
 //
-// This file is part of SHELF, distributed under the Free License.
+// This file is part of SHELF, distributed under the Fair License.
 // For full terms, see the included LICENSE file.
 //
 
@@ -14,6 +14,10 @@ import SHELF
 
 
 let difficultStrings = [
+    "This is just normal text. Nothing special here.",
+    "",
+    " ",
+    "\t",
     "Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇",
     "اختبار النص",
     "من left اليمين to الى right اليسار",
