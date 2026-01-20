@@ -15,7 +15,7 @@ import OSLog
 
 
 /// Something whose only job is to read/write SHELF objects to/from a SHELF object store
-internal protocol ShelfSerializer {
+internal protocol ShelfSerializer: Sendable {
     
     /// Attempts to find the raw data of the SHELF object with the given ID.
     ///

@@ -13,7 +13,9 @@ This is still in low-level rapid initial development. Expect breaking changes to
 Here's the desired features:
 
 - [x] Create
+    - [x] Support for JSON-encodable objects
     - [ ] Make it so devs don't have to do `id: .init()` every tim they make their own objects
+    - [ ] Support for arbitrary binary blobs, not just JSON
 - [x] Read
 - [x] Update
     - [ ] Immutable objects maybe?
@@ -221,6 +223,9 @@ Inside those subfolders are the object files themselves.
       ├ 📄 E66F1E29-BAE3-4838-A8B1-A8FD3E919033
       ╰ 📄 E66F59A6-EE4E-4F80-96BB-86C162E616F5
 ```
+So objects are stored exactly 2 prefix-folders deep. In the example above, you can see every object exists within folders which make up the first 4 characters of its name, like `Project Root/.objects/A7/F3/A7F32199-B32A-49E0-865F-07CE5C5F5F2B`.
+
+This makes lookup trivial; a simple string-splitting function can build the path, and system calls will tell you whether it exists.
 
 The data inside the object files is formatted as arbitrary JSON.
 
@@ -230,3 +235,11 @@ The data inside the object files is formatted as arbitrary JSON.
 The `.shelf-config` file, obviously, stores configuration metadata for this SHELF store.
 
 The version of SHELF used, whether compression was used, etc.
+
+
+
+## If you need a custom `FileManager`
+
+Some codebases have specific concerns which require a custom instance or subclass of `FileManager`. If yours is one of those, you're encouraged to create a new `ShelfSerializer` implementation which either contains that custom file manager, or otherwise addresses your needs.
+
+The rest of this SDK should accept that readily without further customization. If you run into trouble, please file a new issue.

@@ -17,7 +17,7 @@ import SimpleLogging
 
 
 /// This is the primary interface to SHELF if you're not using platform sugar like SHELFPlusSwiftUI
-public struct Shelf {
+public struct Shelf: Sendable {
     
     /// Configuration details for this SHELF store
     let config: ShelfConfig
@@ -96,7 +96,7 @@ public extension Shelf {
     /// - Parameter location: Where the SHELF store is located
     ///
     /// - Throws: An ``InitError`` if initialization fails
-    init(at location: ShelfConfig.StorageLocation) async throws (InitError) {
+    init(at location: ShelfConfig.StorageLocation) async throws(InitError) {
         try await self.init(
             config: .init(storageLocation: location),
             preferLoadingPastConfig: true

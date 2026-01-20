@@ -17,19 +17,13 @@ internal struct LocalDriveShelfSerializer {
     
     /// File URL to the actual location of the object store that this (de)serializes
     private let resolvedLocation: URL
-    
-    /// Use this file manager when performing FileManager operations in this file
-    private let fileManager: FileManager
 }
 
 
 
 internal extension LocalDriveShelfSerializer {
-    init(location: DriveLocation, fileManager: FileManager = .default) {
-        self.init(
-            resolvedLocation: .init(location),
-            fileManager: fileManager
-        )
+    init(location: DriveLocation) {
+        self.init(resolvedLocation: .init(location))
     }
 }
 
@@ -41,7 +35,7 @@ extension LocalDriveShelfSerializer: ShelfSerializer {
         let objectFileUrl = objectUrl(for: id)
         let objectFilePath = objectFileUrl.path(percentEncoded: false)
         
-        guard fileManager.fileExists(atPath: objectFilePath) else {
+        guard FileManager.default.fileExists(atPath: objectFilePath) else {
             return nil
         }
         
@@ -60,7 +54,7 @@ extension LocalDriveShelfSerializer: ShelfSerializer {
         let objectFileUrl = objectUrl(for: id)
         
         do {
-            try fileManager.createDirectory(at: objectFileUrl.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: objectFileUrl.deletingLastPathComponent(), withIntermediateDirectories: true)
             try rawObjectData.write(to: objectFileUrl, options: [.atomic])
         }
         catch {
@@ -109,7 +103,7 @@ extension LocalDriveShelfSerializer: ShelfSerializer {
         let objectFileUrl = objectUrl(for: id)
         
         do {
-            try fileManager.removeItem(at: objectFileUrl)
+            try FileManager.default.removeItem(at: objectFileUrl)
         }
         catch {
             throw .couldNotDeleteObjectFile(cause: error)
@@ -120,7 +114,7 @@ extension LocalDriveShelfSerializer: ShelfSerializer {
     
     func __deleteAllData() throws(Shelf.WholeDatabaseDeleteError) {
         do {
-            try fileManager.removeItem(at: resolvedLocation)
+            try FileManager.default.removeItem(at: resolvedLocation)
         }
         catch {
             throw .couldNotPerformApprovedDeletion(cause: error)
