@@ -125,6 +125,23 @@ public extension Shelf {
     init() async throws(InitError) {
         try await self.init(at: .defaultOnDrive)
     }
+    
+    
+    // MARK: Factories
+    
+    /// Returns a new SHELF which is only-in-memory. This is **guaranteed** to be completely separate from any other SHELF store.
+    ///
+    /// Use this function instead of `.init(storageLocation: .onlyInMemory)` in situations where you can't handle a failure nor asynchronous operations which would happen when the storage location is some other value.
+    static func onlyInMemory() -> Self {
+        self.init(_onlyInMemory: Void())
+    }
+    
+    
+    /// Implementation for ``onlyInMemory()``
+    private init(_onlyInMemory: Void) {
+        self.config = .init(storageLocation: .onlyInMemory)
+        self.serializer = InMemoryShelfSerializer()
+    }
 }
 
 
