@@ -188,6 +188,22 @@ public extension Shelf {
 
 
 
+extension Shelf.ReadError: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.couldNotReadObjectFile(let lhsCause), .couldNotReadObjectFile(let rhsCause)),
+            (.couldNotParseObject(let lhsCause), .couldNotParseObject(let rhsCause)):
+            return (lhsCause as NSError?) == (rhsCause as NSError?)
+            
+        case (.couldNotReadObjectFile(cause: _), _),
+            (.couldNotParseObject(cause: _), _):
+            return false
+        }
+    }
+}
+
+
+
 // MARK: - API: Mutating
 
 public extension Shelf {
@@ -280,9 +296,31 @@ public extension Shelf {
     
     /// An error which might occur while attempting to read from the object store
     enum UpdateError: Error {
-        case updateFunctionThrewSomeError(Error)
+        case updateFunctionThrewSomeError(cause: Error)
         case couldNotReadObject(cause: ReadError)
         case couldNotWriteObject(cause: WriteError)
+    }
+}
+
+
+
+extension Shelf.UpdateError: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.updateFunctionThrewSomeError(cause: let lhsCause), .updateFunctionThrewSomeError(cause: let rhsCause)):
+            return (lhsCause as NSError?) == (rhsCause as NSError?)
+            
+        case (.couldNotReadObject(cause: let lhsCause), .couldNotReadObject(cause: let rhsCause)):
+            return lhsCause == rhsCause
+            
+        case (.couldNotWriteObject(cause: let lhsCause), .couldNotWriteObject(cause: let rhsCause)):
+            return lhsCause == rhsCause
+            
+        case (.updateFunctionThrewSomeError(cause: _), _),
+            (.couldNotReadObject(cause: _), _),
+            (.couldNotWriteObject(cause: _), _):
+            return false
+        }
     }
 }
 
@@ -330,6 +368,40 @@ public extension Shelf {
         /// The dev properly passed the whole-database delete token, and SHELF tried to perform that deletion, but the deletion failed for some reason outside the control of SHELF
         /// - Parameter cause: The reason the deletion failed (often a platform error)
         case couldNotPerformApprovedDeletion(cause: Error)
+    }
+}
+
+
+
+extension Shelf.WriteError: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.couldNotWriteObjectFile(let lhsCause), .couldNotWriteObjectFile(let rhsCause)),
+            (.couldNotSerializeObject(let lhsCause), .couldNotSerializeObject(let rhsCause)):
+            return (lhsCause as NSError?) == (rhsCause as NSError?)
+            
+        case (.couldNotWriteObjectFile(cause: _), _),
+            (.couldNotSerializeObject(cause: _), _):
+            return false
+        }
+    }
+}
+
+
+
+extension Shelf.WholeDatabaseDeleteError: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.couldNotPerformApprovedDeletion(let lhsCause), .couldNotPerformApprovedDeletion(let rhsCause)):
+            return (lhsCause as NSError?) == (rhsCause as NSError?)
+            
+        case (.badDeleteToken, .badDeleteToken):
+            return true
+            
+        case (.couldNotPerformApprovedDeletion(cause: _), _),
+            (.badDeleteToken, _):
+            return false
+        }
     }
 }
 

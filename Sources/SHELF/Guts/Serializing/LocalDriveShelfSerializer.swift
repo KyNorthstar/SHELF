@@ -84,7 +84,7 @@ extension LocalDriveShelfSerializer: ShelfSerializer {
             newData = transformed
         }
         catch {
-            throw .updateFunctionThrewSomeError(error)
+            throw .updateFunctionThrewSomeError(cause: error)
         }
         
         

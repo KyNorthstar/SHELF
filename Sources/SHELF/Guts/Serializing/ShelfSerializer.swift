@@ -158,7 +158,7 @@ internal extension ShelfSerializer {
                     noObjectHandlingApproach = try await onObjectNotFound()
                 }
                 catch {
-                    throw Shelf.UpdateError.updateFunctionThrewSomeError(error)
+                    throw Shelf.UpdateError.updateFunctionThrewSomeError(cause: error)
                 }
                 
                 switch noObjectHandlingApproach {
@@ -189,7 +189,7 @@ internal extension ShelfSerializer {
                 try await transform(&object)
             }
             catch {
-                throw .updateFunctionThrewSomeError(error)
+                throw .updateFunctionThrewSomeError(cause: error)
             }
             
             
