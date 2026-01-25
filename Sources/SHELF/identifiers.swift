@@ -79,10 +79,28 @@ extension ShelfId: Identifiable {
 
 
 
-// MARK: - Hashable {
+// MARK: - Hashable
 
 extension ShelfId: Hashable {
     public func hash(into hasher: inout Hasher) {
         rawValue.hash(into: &hasher)
+    }
+}
+
+
+
+// MARK: LosslessStringConvertible
+
+extension ShelfId: LosslessStringConvertible {
+    public init?(_ description: String) {
+        guard let uuid = try? UUID(description) else {
+            return nil
+        }
+        self.rawValue = uuid
+    }
+    
+    
+    public var description: String {
+        self.rawValue.format(as: .truncatedBase64)
     }
 }
