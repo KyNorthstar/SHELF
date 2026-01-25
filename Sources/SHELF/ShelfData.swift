@@ -13,7 +13,7 @@ import Foundation
 
 
 /// Apply this to any type you have and SHELF will be able to CRUD it!
-public protocol ShelfData: Codable, Sendable {
+public protocol ShelfData: Codable, Sendable, ShelfIdentifiable {
     
     /// The identifier for this data.
     ///
@@ -26,8 +26,8 @@ public protocol ShelfData: Codable, Sendable {
     /// This function is optional, and the default implementation simply assigns `self = newValue`.
     /// Write your own version if you need special behavior (e.g. you're using reference types, so simple assignment won't do).
     ///
-    /// The new data probably came from some update to the object store, or from user input or similar.
-    /// It's best to handle it with care. Include sanitization steps as you see fit.
+    /// - Attention: The new data probably came from some update to the object store, or from user input or similar.
+    ///              Best handle it with care. Include sanitization steps as you see fit.
     ///
     /// - Parameter newValue: The entire new value. Update this data based on that new value
     mutating func update(to newValue: Self)
