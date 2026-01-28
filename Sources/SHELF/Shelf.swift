@@ -220,7 +220,7 @@ public extension Shelf {
         objectWithId id: ShelfId,
         ofType _: Object.Type = Object.self,
         by updateFunction: ObjectUpdateFunction<Object>,
-        onObjectNotFound: ObjectNotFoundFunction<Object> = { .doNothing })
+        onObjectNotFound: ObjectNotFoundFunction<Object>)
     async throws(UpdateError) {
         try await serializer.update(objectWithId: id, by: updateFunction, onObjectNotFound: onObjectNotFound)
     }
