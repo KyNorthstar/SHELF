@@ -18,6 +18,7 @@ import Foundation
 /// {")m80uo4mTQVCIsNF7GCD4KQ'{":"j1ZjJi7pRdO740iC44nwJw"}
 /// ```
 public struct ShelfObjectReference<ObjectType: ShelfData>: ShelfData { // TODO: Test
+    public typealias ObjectType = ObjectType
     public let id: ShelfId
 }
 
