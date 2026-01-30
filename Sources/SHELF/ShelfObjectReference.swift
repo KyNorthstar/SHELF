@@ -20,6 +20,11 @@ import Foundation
 public struct ShelfObjectReference<ObjectType: ShelfData>: ShelfData { // TODO: Test
     public typealias ObjectType = ObjectType
     public let id: ShelfId
+    
+    
+    public init(id: ShelfId) {
+        self.id = id
+    }
 }
 
 
