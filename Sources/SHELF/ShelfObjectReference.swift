@@ -96,3 +96,23 @@ extension ShelfObjectReference: Decodable {
         case invalidShelfId
     }
 }
+
+
+
+// MARK: - Equatable
+
+extension ShelfObjectReference: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+
+
+// MARK: - Hashable
+
+extension ShelfObjectReference: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
