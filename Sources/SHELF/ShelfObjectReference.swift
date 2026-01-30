@@ -23,6 +23,22 @@ public struct ShelfObjectReference<ObjectType: ShelfData>: ShelfData { // TODO: 
 
 
 
+// MARK: - Resolution sugar
+
+public extension ShelfObjectReference {
+    /// Resolve this reference into a concrete object.
+    ///
+    /// This works identical to ``Shelf/object(withId:)``
+    ///
+    /// - Parameter shelf: The Shelf instance which will resolve the object
+    /// - Returns: The resolved object
+    func resolve(using shelf: Shelf) async throws(Shelf.ReadError) -> ObjectType? {
+        try await shelf.object(withId: id)
+    }
+}
+
+
+
 // MARK: - Mutation sugar
 
 public extension ShelfObjectReference {
@@ -35,7 +51,7 @@ public extension ShelfObjectReference {
     ///   - onObjectNotFound: _optional_ - The function which
     mutating func update(
         in shelf: inout Shelf,
-        by updater: @Sendable (inout ObjectType) async throws -> Void,
+        by updater: Shelf.ObjectUpdateFunction<ObjectType>,
         onObjectNotFound: Shelf.ObjectNotFoundFunction<ObjectType>)
     async throws(Shelf.UpdateError) { // TODO: Test
         try await shelf.update(objectWithId: id, ofType: ObjectType.self, by: updater, onObjectNotFound: onObjectNotFound)
