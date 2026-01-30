@@ -36,7 +36,8 @@ extension GenericStringCodingKey {
     ///
     /// For example, SHELF uses a special key to mark which fields are just SHELF IDs referencing other SHELF objects, since those can appear inside any SHELF object.
     ///
-    /// The special key has characters at the start and end of the unique string, which act as delimiters so that SHELF can tell that this is a special key, rather than any object key. The starting character is the Korean letter ㅅ, and the ending charactesr are the Ethiopic section mark ፠ followed by the single left quotation mark ‘. These characters were chosen solely lbecause they're unlikely to be paired together as the start and end characters of a key string, but using something like `__SHELF_SPECIAL_KEY__` would be an irresponsibly large amount of characters for something which might be repeated many times per SHELF object.
+    /// The special key has characters at the start and end of the unique string, which act as delimiters so that SHELF can tell that this is a special key, rather than any object key. The starting character is the Korean letter `ㅅ`, and the ending characters are the Ethiopic section mark `፠` followed by the single left quotation mark `‘`. These characters were chosen solely lbecause they're unlikely to be paired together as the start and end characters of a key string, but using something like `__SHELF_SPECIAL_KEY__` would be an irresponsibly large amount of characters for something which might be repeated many times per SHELF object.
+    /// Using these charactesr also helps guarantee that any parser must support full Unicode.
     ///
     /// For example, if a special key's unique string is `XXXXX`, then the special key would be "ㅅXXX፠‘"
     ///

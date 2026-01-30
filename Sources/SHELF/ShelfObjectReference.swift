@@ -11,11 +11,11 @@ import Foundation
 
 /// A reference to another SHELF object.
 ///
-/// When saved, this is encoded as an object with a single key-value pair. The key is always the same value (`")m80uo4mTQVCIsNF7GCD4KQ'{"`), and the value is always the SHELF ID of the referenced object.
+/// When saved, this is encoded as an object with a single key-value pair. The key is always the same value (`"ㅅm80uo4mTQVCIsNF7GCD4KQ፠‘"`), and the value is always the SHELF ID of the referenced object.
 ///
 /// For example, a reference to an object with ID `j1ZjJi7pRdO740iC44nwJw` would encode as:
 /// ```json
-/// {")m80uo4mTQVCIsNF7GCD4KQ'{":"j1ZjJi7pRdO740iC44nwJw"}
+/// {"ㅅm80uo4mTQVCIsNF7GCD4KQ፠‘":"j1ZjJi7pRdO740iC44nwJw"}
 /// ```
 public struct ShelfObjectReference<ObjectType: ShelfData>: ShelfData { // TODO: Test
     public typealias ObjectType = ObjectType
