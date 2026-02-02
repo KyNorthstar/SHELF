@@ -151,3 +151,21 @@ extension ShelfObjectReference: Hashable {
         hasher.combine(id)
     }
 }
+
+
+
+// MARK: - RawRepresentable
+
+extension ShelfObjectReference: RawRepresentable {
+    public typealias RawValue = ShelfId
+    
+    
+    @inline(__always)
+    public init(rawValue: ShelfId) {
+        self.init(id: rawValue)
+    }
+    
+    
+    @inline(__always)
+    public var rawValue: ShelfId { id }
+}
