@@ -51,6 +51,19 @@ public extension ShelfId {
 
 
 
+// MARK: - Special values
+
+public extension ShelfId {
+    /// Discouraged; use `Optional`/`nil` instead whenever possible.
+    ///
+    /// This is a placeholder when there is no object to reference
+    static var null: Self {
+        .init(rawValue: .null)
+    }
+}
+
+
+
 // MARK: - Codable
 
 extension ShelfId: Encodable {

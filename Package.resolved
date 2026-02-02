@@ -1,5 +1,5 @@
 {
-  "originHash" : "b5901694b98e3b72e203620eb02055bd6c73cedaf6c38ab082a4973192f9142b",
+  "originHash" : "9168cee0e7491e3275cc10a99f8c62dfda83a84b65c1659bedef633f665b4d9d",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RougeWare/UuidTools.git",
       "state" : {
-        "revision" : "dbd634bbdda3e2b3b428eb6580f6244585b99652",
-        "version" : "0.2.1"
+        "revision" : "f918c747061df523e9817316459f2d1b5b17bcd8",
+        "version" : "0.4.0"
       }
     }
   ],

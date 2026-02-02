@@ -66,6 +66,19 @@ public extension ShelfObjectReference {
 
 
 
+// MARK: - Special values
+
+public extension ShelfObjectReference {
+    /// Discouraged; use `Optional`/`nil` instead whenever possible.
+    ///
+    /// This is a placeholder when there is no object to reference
+    static var null: Self {
+        .init(id: .null)
+    }
+}
+
+
+
 // MARK: - Codable
 
 private extension GenericStringCodingKey {

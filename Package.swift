@@ -26,7 +26,7 @@ let package = Package(
         .package(url: "https://github.com/RougeWare/Swift-Simple-Logging", from: "0.5.2"),
         .package(url: "https://github.com/RougeWare/Swift-String-Integer-Access.git", from: "2.1.0"),
         .package(url: "https://github.com/RougeWare/Swift-TODO.git", from: "1.1.0"),
-        .package(url: "https://github.com/RougeWare/UuidTools.git", from: "0.2.1"),
+        .package(url: "https://github.com/RougeWare/UuidTools.git", from: "0.4.0"),
     ],
     
     targets: [
