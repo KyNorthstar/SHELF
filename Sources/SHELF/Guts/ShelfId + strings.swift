@@ -38,3 +38,11 @@ internal extension ShelfIdStrings {
         objectName = string
     }
 }
+
+
+
+internal extension UuidFormat {
+    /// The UUID format for Shelf IDs
+    @inline(__always)
+    static var shelfId: UuidFormat { .truncatedBase64 }
+}

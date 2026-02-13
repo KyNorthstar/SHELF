@@ -69,7 +69,7 @@ public extension ShelfId {
 extension ShelfId: Encodable {
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(rawValue.format(as: .truncatedBase64))
+        try container.encode(rawValue.format(as: .shelfId))
     }
 }
 
@@ -78,7 +78,7 @@ extension ShelfId: Encodable {
 extension ShelfId: Decodable {
     public init(from decoder: any Decoder) throws {
         let uuidString = try decoder.singleValueContainer().decode(String.self)
-        self.init(rawValue: try .init(uuidString, format: .truncatedBase64))
+        self.init(rawValue: try .init(uuidString, format: .shelfId))
     }
 }
 
@@ -106,7 +106,9 @@ extension ShelfId: Hashable {
 
 extension ShelfId: LosslessStringConvertible {
     public init?(_ description: String) {
-        guard let uuid = try? UUID(description) else {
+        guard let uuid = (try? UUID(description, format: .shelfId))
+                      ?? (try? UUID(description))
+        else {
             return nil
         }
         self.rawValue = uuid
@@ -114,6 +116,6 @@ extension ShelfId: LosslessStringConvertible {
     
     
     public var description: String {
-        self.rawValue.format(as: .truncatedBase64)
+        self.rawValue.format(as: .shelfId)
     }
 }

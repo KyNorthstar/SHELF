@@ -96,7 +96,7 @@ private extension ShelfObjectReference {
 extension ShelfObjectReference: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: GenericStringCodingKey.self)
-        try container.encode(id.rawValue, forKey: .otherShelfObjectReference)
+        try container.encode(id, forKey: .otherShelfObjectReference)
     }
 }
 
