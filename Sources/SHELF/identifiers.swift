@@ -64,7 +64,11 @@ public extension ShelfId {
 
 
 
-// MARK: - Codable
+// MARK: - Conformance
+
+
+
+// MARK: Codable
 
 extension ShelfId: Encodable {
     public func encode(to encoder: any Encoder) throws {
@@ -84,7 +88,7 @@ extension ShelfId: Decodable {
 
 
 
-// MARK: - Identifiable
+// MARK: Identifiable
 
 extension ShelfId: Identifiable {
     public var id: RawValue { rawValue }
@@ -92,7 +96,7 @@ extension ShelfId: Identifiable {
 
 
 
-// MARK: - Hashable
+// MARK: Hashable
 
 extension ShelfId: Hashable {
     public func hash(into hasher: inout Hasher) {

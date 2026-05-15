@@ -1,8 +1,11 @@
 //
-//  ShelfIdentifiable.swift
-//  SHELF
+// ShelfIdentifiable.swift
 //
-//  Created by Ky on 2026-01-24.
+// Written by Ky on 2026-01-24.
+// Copyright waived. No rights reserved.
+//
+// This file is part of SHELF, distributed under the Fair License.
+// For full terms, see the included LICENSE file.
 //
 
 import Foundation

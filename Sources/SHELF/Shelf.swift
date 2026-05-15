@@ -260,8 +260,8 @@ public extension Shelf {
     mutating func update<Object: ShelfData>(
         objectWithId id: ShelfId,
         ofType _: Object.Type = Object.self,
-        by updateFunction: ObjectUpdateFunction<Object>,
-        onObjectNotFound: ObjectNotFoundResponse<Object> = .doNothing)
+        onObjectNotFound: ObjectNotFoundResponse<Object> = .doNothing,
+        by updateFunction: ObjectUpdateFunction<Object>)
     async throws(UpdateError) {
         try await update(objectWithId: id, by: updateFunction, onObjectNotFound: { onObjectNotFound })
     }

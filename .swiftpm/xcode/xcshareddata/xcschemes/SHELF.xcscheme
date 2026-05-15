@@ -39,11 +39,6 @@
                BlueprintName = "SHELFTests"
                ReferencedContainer = "container:">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "WholeDatabaseDeletion/failToDeleteWholeDatabase_tookTooLong(storageLocation:)">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

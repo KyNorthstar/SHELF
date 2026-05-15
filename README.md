@@ -48,14 +48,14 @@ import SHELF
 
 
 struct User: ShelfData {
-    let id: ShelfId
+    let id = ShelfId()
     var name: String
 }
 
 
 
 struct Message: ShelfData {
-    let id: ShelfId
+    let id = ShelfId()
     let kind: Kind
     let from: User
     var content: String
@@ -80,18 +80,16 @@ struct Message: ShelfData {
 You create your objects just like any other:
 
 ```swift
-let dax = User(id: .init(), name: "Dax")
-let eevie = User(id: .init(), name: "Eevie")
+let dax = User(name: "Dax")
+let eevie = User(name: "Eevie")
 
 let greeting = Message(
-    id: .init(),
     kind: .plain,
     from: dax,
     content: "Good morning~"
 )
 
 let response = Message(
-    id: .init(),
     kind: .reply(to: greeting),
     from: eevie,
     content: "Hay bitch 🧡"

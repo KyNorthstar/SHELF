@@ -1,14 +1,20 @@
 //
-//  GenericStringCodingKey.swift
-//  SHELF
+// ShelfData.swift
 //
-//  Created by Ky on 2026-01-27.
+// Written by Ky on 2026-01-27.
+// Copyright waived. No rights reserved.
+//
+// This file is part of SHELF, distributed under the Fair License.
+// For full terms, see the included LICENSE file.
 //
 
 import Foundation
 
 
 
+/// A coding key which is just a string, nothing special.
+///
+/// Trying to create it from an integer, or convert it to one, fails silently
 struct GenericStringCodingKey: CodingKey {
     let stringValue: String
     

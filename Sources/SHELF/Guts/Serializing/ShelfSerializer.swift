@@ -147,7 +147,7 @@ internal extension ShelfSerializer {
         onObjectNotFound: Shelf.ObjectNotFoundFunction<Object>)
     async throws(Shelf.UpdateError) {
         @Sendable
-        func swiftCompilerSatiation(oldRawData: Data?) async throws(Shelf.UpdateError) -> Data? {
+        func updater(oldRawData: Data?) async throws(Shelf.UpdateError) -> Data? {
             
             // Check if an object was found
             
@@ -208,7 +208,7 @@ internal extension ShelfSerializer {
         }
         
         
-        try await __update(rawDataForObjectWithId: id, by: swiftCompilerSatiation)
+        try await __update(rawDataForObjectWithId: id, by: updater)
     }
 }
 

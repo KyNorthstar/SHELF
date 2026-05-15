@@ -1,8 +1,11 @@
 //
-//  ShelfObjectReference.swift
-//  SHELF
+// ShelfObjectReference.swift
 //
-//  Created by Ky on 2026-01-27.
+// Written by Ky on 2026-01-27.
+// Copyright waived. No rights reserved.
+//
+// This file is part of SHELF, distributed under the Fair License.
+// For full terms, see the included LICENSE file.
 //
 
 import Foundation
@@ -36,6 +39,8 @@ public extension ShelfObjectReference {
     ///
     /// This works identical to ``Shelf/object(withId:)``
     ///
+    /// - SeeAlso: ``ShelfObjectReference/shelfObjectReference`` to convert the into a reference to the persisted SHELF data
+    ///
     /// - Parameter shelf: The Shelf instance which will resolve the object
     /// - Returns: The resolved object
     func resolve(using shelf: Shelf) async throws(Shelf.ReadError) -> ObjectType? {
@@ -61,6 +66,30 @@ public extension ShelfObjectReference {
         onObjectNotFound: Shelf.ObjectNotFoundFunction<ObjectType>)
     async throws(Shelf.UpdateError) { // TODO: Test
         try await shelf.update(objectWithId: id, ofType: ObjectType.self, by: updater, onObjectNotFound: onObjectNotFound)
+    }
+}
+
+
+
+// MARK: - Conversion sugar
+
+public extension ShelfData {
+    
+    /// Converts this to a reference to its location in SHELF.
+    ///
+    /// - SeeAlso: ``ShelfObjectReference/resolve(using:)`` to convert the reference back into in-memory data
+    var shelfObjectReference: ShelfObjectReference<Self> {
+        .init(id: self.id)
+    }
+}
+
+
+
+public extension ShelfId {
+    
+    /// Converts this ID to a reference to the object stored at the given ID, which unlocks a few more capabilities without needing to load the whole object into memory.
+    func shelfObjectReference<Object: ShelfData>() -> ShelfObjectReference<Object> {
+        .init(id: self)
     }
 }
 
