@@ -358,21 +358,6 @@ public extension Shelf {
 
 
 
-public extension Shelf {
-    /// Thrown when there was a failed attempt to delete the whole database
-    enum WholeDatabaseDeleteError: Error {
-        
-        /// The dev attempted to delete the database, but failed to properly pass the whole-database delete token
-        case badDeleteToken
-        
-        /// The dev properly passed the whole-database delete token, and SHELF tried to perform that deletion, but the deletion failed for some reason outside the control of SHELF
-        /// - Parameter cause: The reason the deletion failed (often a platform error)
-        case couldNotPerformApprovedDeletion(cause: Error)
-    }
-}
-
-
-
 extension Shelf.WriteError: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
@@ -384,6 +369,32 @@ extension Shelf.WriteError: Equatable {
             (.couldNotSerializeObject(cause: _), _):
             return false
         }
+    }
+}
+
+
+
+extension Shelf.WriteError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .couldNotWriteObjectFile(cause: let cause): return "Could not write SHELF object file: \((cause as? LocalizedError)?.errorDescription ?? cause.localizedDescription)"
+        case .couldNotSerializeObject(cause: let cause): return "Could not serialize object: \((cause as? LocalizedError)?.errorDescription ?? cause.localizedDescription)"
+        }
+    }
+}
+
+
+
+public extension Shelf {
+    /// Thrown when there was a failed attempt to delete the whole database
+    enum WholeDatabaseDeleteError: Error {
+        
+        /// The dev attempted to delete the database, but failed to properly pass the whole-database delete token
+        case badDeleteToken
+        
+        /// The dev properly passed the whole-database delete token, and SHELF tried to perform that deletion, but the deletion failed for some reason outside the control of SHELF
+        /// - Parameter cause: The reason the deletion failed (often a platform error)
+        case couldNotPerformApprovedDeletion(cause: Error)
     }
 }
 
